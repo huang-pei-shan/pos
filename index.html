@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>地6攤牛排 POS 系統</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="pos-container">
+        <!-- Header -->
+        <header class="pos-header">
+            <h1>地6攤牛排 <span>POS 系統</span></h1>
+            <div class="table-input-container">
+                <label for="table-number">桌號：</label>
+                <input type="text" id="table-number" placeholder="輸入桌號">
+            </div>
+        </header>
+
+        <div class="pos-main">
+            <!-- Menu Section -->
+            <section class="menu-section">
+                <h2>餐點列表</h2>
+                <div class="menu-grid" id="menu-grid">
+                    <!-- Menu items will be injected here via JS -->
+                </div>
+            </section>
+
+            <!-- Order Cart Section -->
+            <section class="cart-section">
+                <h2>目前訂單</h2>
+                <div class="cart-items" id="cart-items">
+                    <!-- Cart items will be injected here via JS -->
+                    <div class="empty-cart">尚未點餐</div>
+                </div>
+                <div class="cart-summary">
+                    <div class="total-row">
+                        <span>總計：</span>
+                        <span class="total-price" id="total-price">$0</span>
+                    </div>
+                    <button class="checkout-btn" id="checkout-btn">結帳 (送出訂單)</button>
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <!-- Modal for Options -->
+    <div class="modal-overlay" id="options-modal">
+        <div class="modal-content">
+            <h3 id="modal-item-name">餐點名稱</h3>
+            <p class="modal-item-price" id="modal-item-price">$0</p>
+            
+            <div class="options-group" id="sauce-group">
+                <h4>選擇醬料 <span class="required">*</span></h4>
+                <div class="radio-buttons">
+                    <label class="radio-label">
+                        <input type="radio" name="sauce" value="黑胡椒醬">
+                        <span class="radio-custom"></span>黑胡椒醬
+                    </label>
+                    <label class="radio-label">
+                        <input type="radio" name="sauce" value="綜合醬">
+                        <span class="radio-custom"></span>綜合醬
+                    </label>
+                    <label class="radio-label">
+                        <input type="radio" name="sauce" value="蘑菇醬">
+                        <span class="radio-custom"></span>蘑菇醬
+                    </label>
+                    <label class="radio-label">
+                        <input type="radio" name="sauce" value="不加醬">
+                        <span class="radio-custom"></span>不加醬
+                    </label>
+                </div>
+            </div>
+
+            <div class="options-group" id="doneness-group">
+                <h4>選擇熟度 (牛排預設7分熟) <span class="required">*</span></h4>
+                <div class="radio-buttons">
+                    <label class="radio-label">
+                        <input type="radio" name="doneness" value="3分">
+                        <span class="radio-custom"></span>3分
+                    </label>
+                    <label class="radio-label">
+                        <input type="radio" name="doneness" value="5分">
+                        <span class="radio-custom"></span>5分
+                    </label>
+                    <label class="radio-label">
+                        <input type="radio" name="doneness" value="7分" checked>
+                        <span class="radio-custom"></span>7分
+                    </label>
+                    <label class="radio-label">
+                        <input type="radio" name="doneness" value="全熟">
+                        <span class="radio-custom"></span>全熟
+                    </label>
+                </div>
+            </div>
+
+            <div class="modal-actions">
+                <button class="cancel-btn" id="modal-cancel">取消</button>
+                <button class="confirm-btn" id="modal-confirm">加入訂單</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
