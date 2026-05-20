@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>地6攤牛排 POS 點餐系統</title>
+    <link rel="stylesheet" href="styles.css">
+    <!-- Google Fonts import: Fredoka for rounded english/numbers, Noto Sans TC for Chinese content -->
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@300;400;500;600;700&family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="pos-container">
+        <!-- Header -->
+        <header class="pos-header">
+            <div class="brand-section">
+                <span class="brand-logo">🥩</span>
+                <h1>地6攤牛排 <span>POS 系統</span></h1>
+            </div>
+            
+            <div class="table-input-container">
+                <div class="table-badge">桌號</div>
+                <input type="text" id="table-number" placeholder="請輸入桌號" maxlength="5">
+            </div>
+        </header>
+
+        <div class="pos-main">
+            <!-- Menu Section -->
+            <section class="menu-section">
+                <!-- Search & Category Filters -->
+                <div class="menu-controls">
+                    <div class="search-box">
+                        <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="search-icon">
+                            <circle cx="11" cy="11" r="8"></circle>
+                            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                        </svg>
+                        <input type="text" id="search-input" placeholder="搜尋美味餐點、關鍵字...">
+                    </div>
+                    
+                    <div class="category-tabs">
+                        <button class="tab-btn active" data-category="all">
+                            <span>🍽️</span> 全部餐點
+                        </button>
+                        <button class="tab-btn" data-category="steak">
+                            <span>🥩</span> 經典牛排
+                        </button>
+                        <button class="tab-btn" data-category="other">
+                            <span>🍗</span> 美味排餐
+                        </button>
+                        <button class="tab-btn" data-category="side">
+                            <span>🍟</span> 鐵板麵/副食
+                        </button>
+                    </div>
+                </div>
+
+                <div class="menu-grid" id="menu-grid">
+                    <!-- Menu items will be injected here dynamically via JS -->
+                </div>
+            </section>
+
+            <!-- Order Cart Section -->
+            <section class="cart-section">
+                <div class="cart-header">
+                    <h2>目前選購訂單</h2>
+                    <span class="cart-count-badge" id="cart-count-badge">0</span>
+                </div>
+                <div class="cart-items" id="cart-items">
+                    <!-- Cart items will be injected here via JS -->
+                    <div class="empty-cart">
+                        <div class="empty-cart-icon">🛒</div>
+                        <p>尚未點選任何餐點</p>
+                        <span>點擊左側餐點即可加入訂單</span>
+                    </div>
+                </div>
+                <div class="cart-summary">
+                    <div class="total-row">
+                        <span>應付總計：</span>
+                        <span class="total-price" id="total-price">$0</span>
+                    </div>
+                    <button class="checkout-btn" id="checkout-btn">
+                        <span>送出訂單 結帳</span>
+                        <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                            <polyline points="12 5 19 12 12 19"></polyline>
+                        </svg>
+                    </button>
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <!-- Modal for Options Customization -->
+    <div class="modal-overlay" id="options-modal">
+        <div class="modal-content">
+            <h3 id="modal-item-name">餐點名稱</h3>
+            <p class="modal-item-price" id="modal-item-price">$0</p>
+            
+            <div class="options-group" id="sauce-group">
+                <h4>選擇經典醬汁 <span class="required">*</span></h4>
+                <div class="radio-buttons">
+                    <label class="radio-label">
+                        <input type="radio" name="sauce" value="黑胡椒醬">
+                        <span class="radio-custom"></span>
+                        <div class="radio-text">
+                            <strong>黑胡椒醬</strong>
+                            <span>微辣香濃</span>
+                        </div>
+                    </label>
+                    <label class="radio-label">
+                        <input type="radio" name="sauce" value="綜合醬">
+                        <span class="radio-custom"></span>
+                        <div class="radio-text">
+                            <strong>綜合醬</strong>
+                            <span>熱門首選</span>
+                        </div>
+                    </label>
+                    <label class="radio-label">
+                        <input type="radio" name="sauce" value="蘑菇醬">
+                        <span class="radio-custom"></span>
+                        <div class="radio-text">
+                            <strong>蘑菇醬</strong>
+                            <span>香甜滑順</span>
+                        </div>
+                    </label>
+                    <label class="radio-label">
+                        <input type="radio" name="sauce" value="不加醬">
+                        <span class="radio-custom"></span>
+                        <div class="radio-text">
+                            <strong>不加醬</strong>
+                            <span>品嘗原肉原汁</span>
+                        </div>
+                    </label>
+                </div>
+            </div>
+
+            <div class="options-group" id="doneness-group">
+                <h4>選擇熟度 (牛排預設7分熟) <span class="required">*</span></h4>
+                <div class="radio-buttons">
+                    <label class="radio-label">
+                        <input type="radio" name="doneness" value="3分">
+                        <span class="radio-custom"></span>
+                        <div class="radio-text">
+                            <strong>3 分熟</strong>
+                            <span>軟嫩多汁</span>
+                        </div>
+                    </label>
+                    <label class="radio-label">
+                        <input type="radio" name="doneness" value="5分">
+                        <span class="radio-custom"></span>
+                        <div class="radio-text">
+                            <strong>5 分熟</strong>
+                            <span>鮮美適中</span>
+                        </div>
+                    </label>
+                    <label class="radio-label">
+                        <input type="radio" name="doneness" value="7分" checked>
+                        <span class="radio-custom"></span>
+                        <div class="radio-text">
+                            <strong>7 分熟</strong>
+                            <span>原廠推薦</span>
+                        </div>
+                    </label>
+                    <label class="radio-label">
+                        <input type="radio" name="doneness" value="全熟">
+                        <span class="radio-custom"></span>
+                        <div class="radio-text">
+                            <strong>全熟</strong>
+                            <span>紮實飽滿</span>
+                        </div>
+                    </label>
+                </div>
+            </div>
+
+            <div class="modal-actions">
+                <button class="cancel-btn" id="modal-cancel">取消</button>
+                <button class="confirm-btn" id="modal-confirm">加入訂單</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Receipt Modal overlay (Replaces ugly browser alerts) -->
+    <div class="modal-overlay" id="receipt-modal">
+        <div class="modal-content receipt-content">
+            <div class="receipt-header">
+                <div class="success-icon">
+                    <svg viewBox="0 0 24 24" width="48" height="48" stroke="#ea580c" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                        <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                    </svg>
+                </div>
+                <h3>點餐發送成功！</h3>
+                <p>廚房已為您排單製作餐點</p>
+            </div>
+            
+            <div class="receipt-divider"></div>
+            
+            <div class="receipt-details">
+                <div class="receipt-row">
+                    <span class="label">用餐桌號</span>
+                    <strong class="value" id="receipt-table-num">-</strong>
+                </div>
+                <div class="receipt-row">
+                    <span class="label">點單時間</span>
+                    <span class="value" id="receipt-time">-</span>
+                </div>
+                
+                <div class="receipt-divider-dashed"></div>
+                
+                <!-- Receipt Items List Container -->
+                <div class="receipt-items-list" id="receipt-items-list">
+                    <!-- Loaded dynamically via JavaScript -->
+                </div>
+                
+                <div class="receipt-divider-dashed"></div>
+                
+                <div class="receipt-row receipt-total-row">
+                    <span>消費總計</span>
+                    <span id="receipt-total" class="receipt-total-val">$0</span>
+                </div>
+            </div>
+            
+            <button class="confirm-btn receipt-close-btn" id="receipt-close-btn">確定並開始製作</button>
+        </div>
+    </div>
+
+    <!-- Toast Notifications Container -->
+    <div class="toast-container" id="toast-container"></div>
+
+    <script src="app.js"></script>
+</body>
+</html>
